@@ -7,5 +7,8 @@ int main(int argc, char* argv[])
     outfile << "Hi";
     outfile.close();
     
+    int a = 1, b = 2, c = 3;
+    int max = getMaxOf3Int(a, b, c);
+    std::cout << max;
     return 0;
 }

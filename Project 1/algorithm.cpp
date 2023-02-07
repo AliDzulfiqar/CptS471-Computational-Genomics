@@ -12,7 +12,7 @@ void readInput(std::string filename)
         getline(infile, line);
         s1Name = line;
 
-        getline(infile, line)
+        getline(infile, line);
         while(line.length() != 0)
         {
             s1+= line;
@@ -22,7 +22,7 @@ void readInput(std::string filename)
         getline(infile, line);
         s2Name = line;
 
-        getline(infile, line)
+        getline(infile, line);
         while(line.length() != 0)
         {
             s2+= line;
