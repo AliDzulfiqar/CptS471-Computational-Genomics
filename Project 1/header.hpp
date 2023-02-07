@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 
+
 struct DP_Cell {
     int sScore;
     int dScore;
@@ -26,7 +27,10 @@ struct DP_Cell {
     }
 };
 
-void readInput();
-void readConfig();
+void readInput(std::string filename);
+void readConfig(std::string filename);
+int getMaxOf3Int(int i, int s, int d);
+void globalNeedlemanWunschAlgorithm(std::string*, std::string*);
+void localSmithWatermanAlgorithm(std::string*, std::string*);
 
 #endif

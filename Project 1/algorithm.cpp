@@ -44,3 +44,8 @@ void readConfig(std::string filename)
     std::ifstream infile;
     infile.open(filename);
 }
+
+int getMaxOf3Int(int i, int s, int d)
+{
+    return std::max(i, std::max(s, d));
+}
