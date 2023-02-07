@@ -31,6 +31,7 @@ void readInput(std::string filename);
 void readConfig(std::string filename);
 int getMaxOf3Int(int i, int s, int d);
 void globalNeedlemanWunschAlgorithm(std::string*, std::string*);
+int getMaxOrZero(int i, int s, int d);
 void localSmithWatermanAlgorithm(std::string*, std::string*);
 
 #endif
