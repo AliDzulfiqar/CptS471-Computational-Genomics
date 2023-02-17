@@ -39,6 +39,10 @@ void readInputFile(std::string filename)
     } 
 }
 
+void readConfigFile(std::string filename)
+{
+
+}
 int getMaxOf3Int(int i, int s, int d)
 {
     return std::max(i, std::max(s, d));

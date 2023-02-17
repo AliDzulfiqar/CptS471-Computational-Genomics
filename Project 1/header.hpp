@@ -13,11 +13,10 @@ struct DP_Cell {
     int iScore;
 };
 
-int checkMatch(char a, char b);
-
 void readInputFile(std::string);
-// void readConfig(std::string);
+void readConfigFile(std::string);
 int getMaxOf3Int(int, int, int);
+int checkMatch(char a, char b);
 int getMaxOrZero(int, int, int);
 
 #endif
