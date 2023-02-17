@@ -15,7 +15,7 @@ struct DP_Cell {
 
 int checkMatch(char a, char b);
 
-// void readInput(std::string);
+void readInputFile(std::string);
 // void readConfig(std::string);
 int getMaxOf3Int(int, int, int);
 int getMaxOrZero(int, int, int);

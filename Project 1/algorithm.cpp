@@ -1,5 +1,44 @@
 #include "header.hpp"
 
+void readInputFile(std::string filename)
+{
+    extern std::string s1, s1Name, s2, s2Name;
+    std::ifstream infile;
+    std::string line;
+    infile.open(filename);
+    if (infile.is_open()){
+        // read name for s1
+        getline(infile, line);
+        s1Name = line;
+
+        // read sequence for s1
+        getline(infile, line);
+        while (line != ""){
+            s1 += line;
+            getline(infile, line);
+        }
+
+        // read name for s2
+        getline(infile, line);
+        s2Name = line;
+
+        // read sequence for s2
+        getline(infile, line);
+        while(!infile.eof()){
+            s2 += line;
+            getline(infile, line);
+        }
+        getline(infile, line);
+        s2+= line;
+
+        infile.close();
+    }
+    else
+    {
+        std::cout << "Cannot open file" << std::endl;
+    } 
+}
+
 int getMaxOf3Int(int i, int s, int d)
 {
     return std::max(i, std::max(s, d));
@@ -22,5 +61,5 @@ int checkMatch(char a, char b){
 }
 
 void needlemanWunsch(){
-    std::cout << "NeedlemanWunsch"
+    std::cout << "NeedlemanWunsch";
 }

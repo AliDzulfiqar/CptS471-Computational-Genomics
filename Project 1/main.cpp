@@ -6,41 +6,7 @@ int match = 1, mismatch = -2, h = -5, g = -2;
 
 int main(int argc, char* argv[])
 {
-    std::ifstream infile;
-    std::string line;
-    infile.open("Opsin1_colorblindness_gene.fasta");
-    if (infile.is_open()){
-        // read name for s1
-        getline(infile, line);
-        s1Name = line;
-
-        // read sequence for s1
-        getline(infile, line);
-        while (line != ""){
-            s1 += line;
-            getline(infile, line);
-        }
-
-        // read name for s2
-        getline(infile, line);
-        s2Name = line;
-
-        // read sequence for s2
-        getline(infile, line);
-        while(!infile.eof()){
-            s2 += line;
-            getline(infile, line);
-        }
-        getline(infile, line);
-        s2+= line;
-
-        infile.close();
-    }
-    else
-    {
-        std::cout << "Cannot open file" << std::endl;
-    } 
-    
+    readInputFile("Input.fasta");
     // Printing report.txt
     std::ofstream outfile;
     outfile.open("Report.txt");
