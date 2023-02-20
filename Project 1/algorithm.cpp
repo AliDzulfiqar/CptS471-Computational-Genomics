@@ -88,10 +88,64 @@ int checkMatch(char a, char b){
     return mismatch;
 }
 
-std::vector<std::vector<DP_Cell> globalAlignment(std::string s1, std::string s2)
+std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s2)
 {
     int m = s1.length();
     int n = s2.length();
 
-    std::vector<std::vector<DP_Cell>(m, vector<DP_Cell>(n));
+    extern int h, g;
+
+    // initialize matrix
+    std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
+    for (int i = 0; i <= m; i++){
+        DPTable[i][0].dScore = h + i * g;
+    }
+    for (int j = 0; j <= n; j++){
+        DPTable[0][j].iScore = h + j * g;
+    }
+
+    for (int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            int path1 = DPTable[i - 1][j - 1].sScore + checkMatch(s1[i - 1], s2[j - 1]);
+            int path2 = DPTable[i - 1][j].dScore + g;
+            int path3 = DPTable[i][j - 1].iScore + g;
+            // get max score
+            DPTable[i][j].sScore = getMaxOf3Int(path1, path2, path3);
+            DPTable[i][j].dScore = std::max(path2, DPTable[i][j].sScore + g + h);
+            DPTable[i][j].iScore = std::max(path3, DPTable[i][j].sScore + g + h);
+        }
+    }
+
+    return DPTable;
+}
+
+std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)
+{
+    int m = s1.length();
+    int n = s2.length();
+
+    extern int h, g;
+
+    // initialize matrix
+    std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
+    for (int i = 0; i <= m; i++){
+        DPTable[i][0].dScore = h + i * g;
+    }
+    for (int j = 0; j <= n; j++){
+        DPTable[0][j].iScore = h + j * g;
+    }
+
+    for (int i = 1; i <= m; i++){
+        for(int j = 1; j <= n; j++){
+            int path1 = DPTable[i - 1][j - 1].sScore + checkMatch(s1[i - 1], s2[j - 1]);
+            int path2 = DPTable[i - 1][j].dScore + g;
+            int path3 = DPTable[i][j - 1].iScore + g;
+            // get max score
+            DPTable[i][j].sScore = getMaxOrZero(path1, path2, path3);
+            DPTable[i][j].dScore = std::max(path2, DPTable[i][j].sScore + g + h);
+            DPTable[i][j].iScore = std::max(path3, DPTable[i][j].sScore + g + h);
+        }
+    }
+
+    return DPTable;
 }
