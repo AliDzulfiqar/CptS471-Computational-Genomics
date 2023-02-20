@@ -43,15 +43,23 @@ void readConfigFile(std::string filename)
 {
     extern int match, mismatch, h, g;
     std::ifstream infile;
-    char temp;
     std::string line;
+    char delim = ' ';
     infile.open(filename);
 
     if(infile.is_open()){
         std::cout << "File open" << std::endl;
-        while(!infile.eof()){
-            getline(infile, line);
-            std::cout << line << std::endl;
+        while(std::getline(infile, line)){
+            if(line.find("match")){
+                match = std::stoi(line.substr(line.find(delim) + 1));
+            }
+            else if (line.find("mismatch")) {
+                mismatch = std::stoi(line.substr(line.find(" ") + 1));
+            } else if (line.find("h")) {
+                h = std::stoi(line.substr(line.find(" ") + 1));
+            } else if (line.find("g")) {
+                g = std::stoi(line.substr(line.find(" ") + 1));
+            }
         }
     }
     else
