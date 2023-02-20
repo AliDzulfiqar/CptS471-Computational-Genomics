@@ -88,6 +88,10 @@ int checkMatch(char a, char b){
     return mismatch;
 }
 
-void needlemanWunsch(){
-    std::cout << "NeedlemanWunsch";
+std::vector<std::vector<DP_Cell> globalAlignment(std::string s1, std::string s2)
+{
+    int m = s1.length();
+    int n = s2.length();
+
+    std::vector<std::vector<DP_Cell>(m, vector<DP_Cell>(n));
 }

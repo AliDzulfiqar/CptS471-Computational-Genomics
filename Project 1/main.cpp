@@ -11,16 +11,16 @@ int main(int argc, char* argv[])
 {
     int score = 0, s1GapCount = 0, s2GapCount = 0;
     bool alignmentType = 0;
-    // if (argc >= 4){
-    //     readInputFile(argv[1]);
-    //     alignmentType = std::stoi(argv[2]);
-    //     readConfigFile(argv[3]);
-    // }
-    readConfigFile("parameters.config");
-    std::cout << "match: " << match << std::endl;
-    std::cout << "mismatch: " << mismatch << std::endl;
-    std::cout << "h: " << h << std::endl;
-    std::cout << "g: " << g << std::endl;
+    if (argc >= 4){
+        readInputFile(argv[1]);
+        alignmentType = std::stoi(argv[2]);
+        readConfigFile(argv[3]);
+    }
+    // readConfigFile("parameters.config");
+    // std::cout << "match: " << match << std::endl;
+    // std::cout << "mismatch: " << mismatch << std::endl;
+    // std::cout << "h: " << h << std::endl;
+    // std::cout << "g: " << g << std::endl;
     
     // Printing report.txt
     std::ofstream outfile;
