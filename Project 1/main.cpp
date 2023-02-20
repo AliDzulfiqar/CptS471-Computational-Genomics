@@ -13,7 +13,8 @@ int main(int argc, char* argv[])
         alignmentType = std::stoi(argv[2]);
         readConfigFile(argv[3]);
     }
-
+    // readConfigFile("parameters.config");
+    
     // Printing report.txt
     std::ofstream outfile;
     outfile.open("Report.txt");

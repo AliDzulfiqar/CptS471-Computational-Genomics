@@ -41,7 +41,23 @@ void readInputFile(std::string filename)
 
 void readConfigFile(std::string filename)
 {
+    extern int match, mismatch, h, g;
+    std::ifstream infile;
+    char temp;
+    std::string line;
+    infile.open(filename);
 
+    if(infile.is_open()){
+        std::cout << "File open" << std::endl;
+        while(!infile.eof()){
+            getline(infile, line);
+            std::cout << line << std::endl;
+        }
+    }
+    else
+    {
+        std::cout << "Cannot open file" << std::endl;
+    }
 }
 int getMaxOf3Int(int i, int s, int d)
 {
