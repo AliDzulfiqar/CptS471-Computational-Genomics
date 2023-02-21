@@ -42,25 +42,30 @@ void readInputFile(std::string filename)
 void readConfigFile(std::string filename)
 {
     extern int match, mismatch, h, g;
+    int matchTemp, mismatchTemp, hTemp, gTemp;
     std::ifstream infile;
-    std::string line;
-    char delim = ' ';
+    std::string line, delimeter = " ", token;
     infile.open(filename);
 
     if(infile.is_open()){
-        std::cout << "File open" << std::endl;
-        while(std::getline(infile, line)){
-            if(line.find("match")){
-                match = std::stoi(line.substr(line.find(delim) + 1));
+        for (int i = 0; i < 4; i++){
+            getline(infile, line);
+            token = line.substr(line.find(delimeter) + 1);
+            if(i == 0){
+                match = std::stoi(token);
             }
-            else if (line.find("mismatch")) {
-                mismatch = std::stoi(line.substr(line.find(" ") + 1));
-            } else if (line.find("h")) {
-                h = std::stoi(line.substr(line.find(" ") + 1));
-            } else if (line.find("g")) {
-                g = std::stoi(line.substr(line.find(" ") + 1));
+            if (i == 1) {
+                mismatch = std::stoi(token);
+            } 
+            if (i == 2) {
+                h= std::stoi(token);
+
+            } 
+            if (i == 3) {
+                g = std::stoi(token);
             }
         }
+        infile.close();
     }
     else
     {
