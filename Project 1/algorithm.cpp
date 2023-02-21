@@ -103,21 +103,23 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
     // initialize matrix
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
     for (int i = 0; i <= m; i++){
+        DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
+        DPTable[i][0].iScore = INT_MIN - h - g;
     }
     for (int j = 0; j <= n; j++){
+        DPTable[0][j].sScore = INT_MIN - h - g;
+        DPTable[0][j].dScore = INT_MIN - h - g;
         DPTable[0][j].iScore = h + j * g;
     }
 
+    // iterate each elements of the matrix
     for (int i = 1; i <= m; i++){
-        for(int j = 1; j <= n; j++){
-            int path1 = DPTable[i - 1][j - 1].sScore + checkMatch(s1[i - 1], s2[j - 1]);
-            int path2 = DPTable[i - 1][j].dScore + g;
-            int path3 = DPTable[i][j - 1].iScore + g;
-            // get max score
-            DPTable[i][j].sScore = getMaxOf3Int(path1, path2, path3);
-            DPTable[i][j].dScore = std::max(path2, DPTable[i][j].sScore + g + h);
-            DPTable[i][j].iScore = std::max(path3, DPTable[i][j].sScore + g + h);
+        for (int j = 1; j <= n; j++){
+            // find max score
+            DPTable[i][j].sScore = getMaxOf3Int(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
+            DPTable[i][j].dScore = getMaxOf3Int(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
+            DPTable[i][j].iScore = getMaxOf3Int(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
         }
     }
 
