@@ -8,9 +8,17 @@
 #include <vector>
 
 struct DP_Cell {
+    int value;
+    int direction;
     int sScore;
     int dScore;
     int iScore;
+};
+
+enum Direction {
+    left = 0,
+    diagonal = 1,
+    up = 2
 };
 
 void readInputFile(std::string);

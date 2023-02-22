@@ -136,11 +136,15 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     // initialize matrix
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
     for (int i = 0; i <= m; i++){
+        DPTable[i][0].value = i * g;
+        DPTable[i][0].direction = up;
         DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
         DPTable[i][0].iScore = INT_MIN - h - g;
     }
     for (int j = 0; j <= n; j++){
+        DPTable[0][j].value = j * g;
+        DPTable[0][j].direction = left;
         DPTable[0][j].sScore = INT_MIN - h - g;
         DPTable[0][j].dScore = INT_MIN - h - g;
         DPTable[0][j].iScore = h + j * g;
