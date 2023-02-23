@@ -6,6 +6,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <cmath>
 
 struct DP_Cell {
     int value;
@@ -30,5 +31,6 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string, std::string);
 int tracebackGlobal (std::vector<std::vector<DP_Cell> >, std::string *, std::string *);
 std::vector<std::vector<DP_Cell> > localAlignment(std::string, std::string);
 int tracebackLocal (std::vector<std::vector<DP_Cell> >, std::string*, std::string*);
+void printReport(std::string, bool);
 
 #endif

@@ -164,6 +164,9 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
         else if (i < 0) {
             current = globalTable[0][j];
         }
+        else {
+            current = globalTable[i][j];
+        }
         if(i == 0 && j == 0){
             break;
         }
@@ -261,4 +264,103 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     }
 
     return DPTable;
+}
+
+void printReport(std::string filename, bool alignmentType)
+{
+    // declare variables
+    extern std::string s1, s2, s1Name, s2Name;
+    extern int match, mismatch, h, g;
+    extern int totalMatches, totalMismatches, openingGaps, gapExtensions;
+    std::string tracebackS1, tracebackS2;
+    int optimalScore = 0, s1GapCount = 0, s2GapCount = 0;
+
+    // open file
+    std::ofstream outfile;
+    outfile.open(filename);
+
+    // printing report
+    outfile << "INPUT:\n******\n";
+    outfile << std::endl;
+    outfile << s1Name << "\n" << s1 << std::endl;
+    outfile << std::endl;
+    outfile << s2Name << "\n" << s2 << std::endl;
+    outfile << std::endl;
+    outfile << "OUTPUT:\n********\n";
+    outfile << std::endl;
+    outfile << "Scores:\t" << "match = " << match << ", mismatch = " << mismatch << ", h = " << h << ", g = " << g << std::endl;
+    outfile << std::endl;
+    outfile << "Sequence 1 = 's1', length = " << s1.length() << std::endl;
+    outfile << "Sequence 2 = 's2', length = " << s2.length() << std::endl;
+    outfile << std::endl;
+    outfile << "Report:" << std::endl;
+
+    if(alignmentType){
+        std::vector<std::vector <DP_Cell> > localTable = localAlignment(s1, s2);
+        outfile << "Local Substitution Score: " << localTable[s1.length()][s2.length()].sScore << std::endl;
+        outfile << "Local Deletion Score: " << localTable[s1.length()][s2.length()].dScore << std::endl;
+        outfile << "Local Insertion Score: " << localTable[s1.length()][s2.length()].iScore << std::endl;
+        outfile << "Local Value: " << localTable[s1.length()][s2.length()].value << std::endl;
+    }
+    else {
+        std::vector<std::vector <DP_Cell> > globalTable = globalAlignment(s1, s2);
+        // outfile << "Global Substitution Score: " << globalTable[s1.length()][s2.length()].sScore << std::endl;
+        // outfile << "Global Deletion Score: " << globalTable[s1.length()][s2.length()].dScore << std::endl;
+        // outfile << "Global Insertion Score: " << globalTable[s1.length()][s2.length()].iScore << std::endl;
+        // outfile << "Global Value: " << globalTable[s1.length()][s2.length()].value << std::endl;
+        tracebackGlobal(globalTable, &tracebackS1, &tracebackS2);
+        std::reverse(tracebackS1.begin(), tracebackS1.end());
+        std::reverse(tracebackS2.begin(), tracebackS2.end());
+        for (int i = 0; i < tracebackS1.length(); i++){
+            outfile << tracebackS1[i];
+        }
+        outfile << std::endl;
+        
+        for (int i = 0; i < tracebackS1.length(); i++){
+            
+            if (tracebackS1[i] == tracebackS2[i]){
+                outfile << "|";
+                totalMatches++;
+            }
+            else if(tracebackS1[i] == '-'){
+                outfile << " ";
+                s1GapCount++;
+                if (tracebackS1[i - 1] != '-')
+                {
+                    openingGaps++;
+                    gapExtensions++;
+                }
+                else {
+                    gapExtensions++;
+                }
+            }
+            else if(tracebackS2[i] == '-'){
+                outfile << " ";
+                s2GapCount++;
+                if (tracebackS2[i - 1] != '-')
+                {
+                    openingGaps++;
+                    gapExtensions++;
+                }
+                else {
+                    gapExtensions++;
+                }
+            }
+            else {
+                outfile << " ";
+                totalMismatches++;
+            }
+        }
+        outfile << std::endl;
+        for (int i = 0; i < tracebackS2.length(); i++){
+            outfile << tracebackS2[i];
+        }
+
+        outfile << std::endl;
+        outfile << "Number of:  matches = " << totalMatches << ", mismatches = " << totalMismatches << ", opening gaps = " << openingGaps << ", gap extensions = " << gapExtensions<< std::endl;
+        outfile << "Identities = " << totalMatches << "/" << tracebackS1.length() << " (" << ((floor)((double)totalMatches/(double)tracebackS1.length()*100)) << "%), " << "Gaps = " << gapExtensions << "/" << tracebackS1.length() << " (" << ((floor)((double)gapExtensions/(double)tracebackS1.length()*100)) << "%)";
+
+    }
+
+    outfile.close();
 }
