@@ -82,7 +82,10 @@ int getMaxOrZero(int i, int s, int d){
     if (i < 0 && s < 0 && d < 0){
         return 0;
     }
-    return getMaxOf3Int(i, s, d);
+    else {
+        return getMaxOf3Int(i, s, d);
+    }
+    
 }
 
 int checkMatch(char a, char b){
@@ -94,39 +97,6 @@ int checkMatch(char a, char b){
 }
 
 std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s2)
-{
-    int m = s1.length();
-    int n = s2.length();
-
-    extern int h, g;
-
-    // initialize matrix
-    std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
-    for (int i = 0; i <= m; i++){
-        DPTable[i][0].sScore = INT_MIN - h - g;
-        DPTable[i][0].dScore = h + i * g;
-        DPTable[i][0].iScore = INT_MIN - h - g;
-    }
-    for (int j = 0; j <= n; j++){
-        DPTable[0][j].sScore = INT_MIN - h - g;
-        DPTable[0][j].dScore = INT_MIN - h - g;
-        DPTable[0][j].iScore = h + j * g;
-    }
-
-    // iterate each elements of the matrix
-    for (int i = 1; i <= m; i++){
-        for (int j = 1; j <= n; j++){
-            // find max score
-            DPTable[i][j].sScore = getMaxOf3Int(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
-            DPTable[i][j].dScore = getMaxOf3Int(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
-            DPTable[i][j].iScore = getMaxOf3Int(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
-        }
-    }
-
-    return DPTable;
-}
-
-std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)
 {
     int m = s1.length();
     int n = s2.length();
@@ -154,9 +124,82 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     for (int i = 1; i <= m; i++){
         for (int j = 1; j <= n; j++){
             // find max score
+            DPTable[i][j].sScore = getMaxOf3Int(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
+            DPTable[i][j].dScore = getMaxOf3Int(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
+            DPTable[i][j].iScore = getMaxOf3Int(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
+
+
+            // find direction to proceed
+            if(DPTable[i][j].sScore > std::max(DPTable[i][j].dScore, DPTable[i][j].iScore)){
+                DPTable[i][j].direction = diagonal;
+                DPTable[i][j].value = DPTable[i][j].sScore;
+            }
+            else if (DPTable[i][j].dScore > DPTable[i][j].iScore){
+                DPTable[i][j].direction = up;
+                DPTable[i][j].value = DPTable[i][j].dScore;
+            }
+            else {
+                DPTable[i][j].direction = left;
+                DPTable[i][j].value = DPTable[i][j].iScore;
+            }
+        }
+
+    }
+
+    return DPTable;
+}
+
+int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string *s1Comp, std::string *s2Comp)
+{
+    // traceback global
+    return 0;
+}
+
+std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)
+{
+    int m = s1.length();
+    int n = s2.length();
+
+    extern int h, g;
+
+    // initialize matrix
+    std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
+    for (int i = 0; i <= m; i++){
+        DPTable[i][0].value = 0;
+        DPTable[i][0].direction = up;
+        DPTable[i][0].sScore = INT_MIN - h - g;
+        DPTable[i][0].dScore = h + i * g;
+        DPTable[i][0].iScore = INT_MIN - h - g;
+    }
+    for (int j = 0; j <= n; j++){
+        DPTable[0][j].value = 0;
+        DPTable[0][j].direction = left;
+        DPTable[0][j].sScore = INT_MIN - h - g;
+        DPTable[0][j].dScore = INT_MIN - h - g;
+        DPTable[0][j].iScore = h + j * g;
+    }
+
+    // iterate each elements of the matrix
+    for (int i = 1; i <= m; i++){
+        for (int j = 1; j <= n; j++){
+            // find max score
             DPTable[i][j].sScore = getMaxOrZero(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
             DPTable[i][j].dScore = getMaxOrZero(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
             DPTable[i][j].iScore = getMaxOrZero(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
+
+            // find direction to proceed
+            if(DPTable[i][j].sScore > std::max(DPTable[i][j].dScore, DPTable[i][j].iScore)){
+                DPTable[i][j].direction = diagonal;
+                DPTable[i][j].value = DPTable[i][j].sScore;
+            }
+            else if (DPTable[i][j].dScore > DPTable[i][j].iScore){
+                DPTable[i][j].direction = up;
+                DPTable[i][j].value = DPTable[i][j].dScore;
+            }
+            else {
+                DPTable[i][j].direction = left;
+                DPTable[i][j].value = DPTable[i][j].iScore;
+            }
         }
     }
 

@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
         alignmentType = std::stoi(argv[2]);
         readConfigFile(argv[3]);
     }
+    
+
 
     // Printing report.txt
     std::ofstream outfile;
@@ -33,6 +35,23 @@ int main(int argc, char* argv[])
     outfile << "Sequence 2 = 's2', length = " << s2.length() << std::endl;
     outfile << std::endl;
     outfile << "Report:" << std::endl;
+
+    if(alignmentType){
+        std::vector<std::vector <DP_Cell> > localTable = localAlignment(s1, s2);
+        outfile << "Local Substitution Score: " << localTable[s1.length()][s2.length()].sScore << std::endl;
+        outfile << "Local Deletion Score: " << localTable[s1.length()][s2.length()].dScore << std::endl;
+        outfile << "Local Insertion Score: " << localTable[s1.length()][s2.length()].iScore << std::endl;
+        outfile << "Local Value: " << localTable[s1.length()][s2.length()].value << std::endl;
+    }
+    else {
+        std::vector<std::vector <DP_Cell> > globalTable = globalAlignment(s1, s2);
+        outfile << "Global Substitution Score: " << globalTable[s1.length()][s2.length()].sScore << std::endl;
+        outfile << "Global Deletion Score: " << globalTable[s1.length()][s2.length()].dScore << std::endl;
+        outfile << "Global Insertion Score: " << globalTable[s1.length()][s2.length()].iScore << std::endl;
+        outfile << "Global Value: " << globalTable[s1.length()][s2.length()].value << std::endl;
+    }
+   
+    
 
 
     outfile.close();
