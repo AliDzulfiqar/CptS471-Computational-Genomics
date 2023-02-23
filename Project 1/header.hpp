@@ -27,7 +27,8 @@ int getMaxOf3Int(int, int, int);
 int checkMatch(char a, char b);
 int getMaxOrZero(int, int, int);
 std::vector<std::vector<DP_Cell> > globalAlignment(std::string, std::string);
-int tracebackGlobal (std::vector<std::vector<DP_Cell> >);
+int tracebackGlobal (std::vector<std::vector<DP_Cell> >, std::string *, std::string *);
 std::vector<std::vector<DP_Cell> > localAlignment(std::string, std::string);
+int tracebackLocal (std::vector<std::vector<DP_Cell> >, std::string*, std::string*);
 
 #endif

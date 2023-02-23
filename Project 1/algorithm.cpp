@@ -149,10 +149,67 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
     return DPTable;
 }
 
-int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string *s1Comp, std::string *s2Comp)
+int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string *tracebackS1, std::string *tracebackS2)
 {
-    // traceback global
-    return 0;
+    extern std::string s1, s2;
+    int i = s1.length(), j = s2.length();
+    int score = globalTable[i][j].value;
+    
+    DP_Cell current = globalTable[i][j];
+    
+    while(i >= 0 && j >= 0 && tracebackS1){
+        if (j < 0) {
+            current = globalTable[i][0];
+        }
+        else if (i < 0) {
+            current = globalTable[0][j];
+        }
+        if(i == 0 && j == 0){
+            break;
+        }
+        switch (current.direction)
+        {
+        case left:
+            --j;
+            *tracebackS1 += '-';
+            if (j >= 0){
+                *tracebackS2 += s2[j];
+            }
+            else {
+                *tracebackS2 += '-';
+            }
+            break;
+        
+        case diagonal:
+            i--;
+            j--;
+            if (i >= 0){
+                *tracebackS1 += s1[i];
+            }
+            else {
+                *tracebackS1 += '-';
+            }
+            if (j >= 0){
+                *tracebackS2 += s2[j];
+            }
+            else {
+                *tracebackS2 += '-';
+            }
+            break;
+
+        case up:
+            --i;
+            if (i >= 0){
+                *tracebackS1 += s1[i];
+            }
+            else {
+                *tracebackS1 += '-';
+            }
+            *tracebackS2 += '-';
+            break;
+        }
+    }
+    return score;
 }
 
 std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)

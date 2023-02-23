@@ -6,8 +6,8 @@ int match = 1, mismatch = -2, h = -5, g = -1;
 int totalMatches, totalMismatches, openingGaps, gapExtensions;
 
 int main(int argc, char* argv[])
-{
-    
+{   
+    std::string tracebackS1, tracebackS2;
     int score = 0, s1GapCount = 0, s2GapCount = 0;
     bool alignmentType = false; // 0 for global, 1 for local
     if (argc >= 4){
@@ -15,8 +15,6 @@ int main(int argc, char* argv[])
         alignmentType = std::stoi(argv[2]);
         readConfigFile(argv[3]);
     }
-    
-
 
     // Printing report.txt
     std::ofstream outfile;
@@ -49,10 +47,11 @@ int main(int argc, char* argv[])
         outfile << "Global Deletion Score: " << globalTable[s1.length()][s2.length()].dScore << std::endl;
         outfile << "Global Insertion Score: " << globalTable[s1.length()][s2.length()].iScore << std::endl;
         outfile << "Global Value: " << globalTable[s1.length()][s2.length()].value << std::endl;
+        std::cout << "Traceback global: " << tracebackGlobal(globalTable, &tracebackS1, &tracebackS2) << std::endl;
+        // std::cout << "Traceback s1" << tracebackS1 << std::endl;
+        // std::cout << "Traceback s2" << tracebackS2 << std::endl;
     }
    
-    
-
 
     outfile.close();
     
