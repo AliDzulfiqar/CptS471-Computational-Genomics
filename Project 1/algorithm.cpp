@@ -1,5 +1,6 @@
 #include "header.hpp"
 
+// Read input file (.fasta)
 void readInputFile(std::string filename)
 {
     extern std::string s1, s1Name, s2, s2Name;
@@ -39,6 +40,7 @@ void readInputFile(std::string filename)
     } 
 }
 
+// Read configuration file for scoring parameters
 void readConfigFile(std::string filename)
 {
     extern int match, mismatch, h, g;
@@ -46,8 +48,8 @@ void readConfigFile(std::string filename)
     std::ifstream infile;
     std::string line, delimeter = " ", token;
     infile.open(filename);
-
     if(infile.is_open()){
+        // loop 4 times for 4 lines
         for (int i = 0; i < 4; i++){
             getline(infile, line);
             token = line.substr(line.find(delimeter) + 1);
@@ -72,12 +74,14 @@ void readConfigFile(std::string filename)
         std::cout << "Cannot open file" << std::endl;
     }
 }
+
+// Get a maximum value of 3 integers
 int getMaxOf3Int(int i, int s, int d)
 {
     return std::max(i, std::max(s, d));
 }
 
-
+// Get a maximum value of integer. However if all values are negative, return 0
 int getMaxOrZero(int i, int s, int d){
     if (i < 0 && s < 0 && d < 0){
         return 0;
@@ -88,6 +92,7 @@ int getMaxOrZero(int i, int s, int d){
     
 }
 
+// Determine whether string is a match or a mismatch
 int checkMatch(char a, char b){
     extern int match, mismatch;
     if (a == b){
@@ -96,8 +101,10 @@ int checkMatch(char a, char b){
     return mismatch;
 }
 
+// Create a 2x2 table for Global Alignment
 std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s2)
 {
+    // determine size m and n for vector
     int m = s1.length() + 1;
     int n = s2.length() + 1;
 
@@ -128,7 +135,6 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
             DPTable[i][j].dScore = getMaxOf3Int(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
             DPTable[i][j].iScore = getMaxOf3Int(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
 
-
             // find cases to proceed
             if(DPTable[i][j].sScore > std::max(DPTable[i][j].dScore, DPTable[i][j].iScore)){
                 DPTable[i][j].cases = substitution;
@@ -149,6 +155,7 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
     return DPTable;
 }
 
+// Traceback algorithm for global alignment
 int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string *tracebackS1, std::string *tracebackS2)
 {
     extern std::string s1, s2;
@@ -157,6 +164,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
     
     DP_Cell current = globalTable[i][j];
     
+    // Retrace the table based on each cases. Produce 2 aligned string values
     while(i > 0 && j > 0){
         if (j < 0) {
             current = globalTable[i][0];
@@ -215,6 +223,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
     return score;
 }
 
+// Create a 2x2 table for Local Alignment
 std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)
 {
     int m = s1.length() + 1;
@@ -242,6 +251,7 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     // iterate each elements of the matrix
     for (int i = 1; i < m; i++){
         for (int j = 1; j < n; j++){
+
             // find max score
             DPTable[i][j].sScore = getMaxOrZero(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
             DPTable[i][j].dScore = getMaxOrZero(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
@@ -266,6 +276,7 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     return DPTable;
 }
 
+// Traceback algorithm for Local Alignment
 int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* tracebackS1, std::string* tracebackS2)
 {  
     extern std::string s1, s2;
@@ -285,6 +296,7 @@ int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* 
 
     DP_Cell current = localTable[maxI][maxJ];
 
+    // Retrace the algorithm to find optimal score and produce two aligned string
     while(current.value > 0){
         switch (current.cases)
         {
@@ -332,6 +344,8 @@ int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* 
     }
     return score;
 }
+
+// Print report
 void printReport(std::string filename, bool alignmentType)
 {
     // declare variables
@@ -360,7 +374,7 @@ void printReport(std::string filename, bool alignmentType)
     outfile << "Sequence 2 = 's2', length = " << s2.length() << std::endl;
     outfile << std::endl;
     
-
+    
     if(alignmentType){
         std::vector<std::vector <DP_Cell> > localTable = localAlignment(s1, s2);
         optimalScore = tracebackLocal(localTable, &tracebackS1, &tracebackS2);
@@ -410,6 +424,7 @@ void printReport(std::string filename, bool alignmentType)
         for (int i = 0; i < tracebackS2.length(); i++){
             outfile << tracebackS2[i];
         }
+        
         outfile << std::endl;
         outfile << std::endl;
         outfile << "Report:" << std::endl;

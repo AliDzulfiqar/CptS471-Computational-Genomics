@@ -7,7 +7,7 @@ int totalMatches, totalMismatches, openingGaps, gapExtensions;
 
 int main(int argc, char* argv[])
 {   
-    
+    // using command line argument for input $
     bool alignmentType = false; // 0 for global, 1 for local
     if (argc >= 4){
         readInputFile(argv[1]);

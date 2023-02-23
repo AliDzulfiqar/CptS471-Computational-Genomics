@@ -16,6 +16,7 @@ struct DP_Cell {
     int iScore;
 };
 
+// enumerate cases
 enum Case {
     insertion = 0,
     substitution = 1,
