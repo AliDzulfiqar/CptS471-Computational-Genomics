@@ -107,14 +107,14 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
     for (int i = 0; i < m; i++){
         DPTable[i][0].value = i * g;
-        DPTable[i][0].direction = up;
+        DPTable[i][0].cases = deletion;
         DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
         DPTable[i][0].iScore = INT_MIN - h - g;
     }
     for (int j = 0; j < n; j++){
         DPTable[0][j].value = j * g;
-        DPTable[0][j].direction = left;
+        DPTable[0][j].cases = insertion;
         DPTable[0][j].sScore = INT_MIN - h - g;
         DPTable[0][j].dScore = INT_MIN - h - g;
         DPTable[0][j].iScore = h + j * g;
@@ -129,17 +129,17 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
             DPTable[i][j].iScore = getMaxOf3Int(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
 
 
-            // find direction to proceed
+            // find cases to proceed
             if(DPTable[i][j].sScore > std::max(DPTable[i][j].dScore, DPTable[i][j].iScore)){
-                DPTable[i][j].direction = diagonal;
+                DPTable[i][j].cases = substitution;
                 DPTable[i][j].value = DPTable[i][j].sScore;
             }
             else if (DPTable[i][j].dScore > DPTable[i][j].iScore){
-                DPTable[i][j].direction = up;
+                DPTable[i][j].cases = deletion;
                 DPTable[i][j].value = DPTable[i][j].dScore;
             }
             else {
-                DPTable[i][j].direction = left;
+                DPTable[i][j].cases = insertion;
                 DPTable[i][j].value = DPTable[i][j].iScore;
             }
         }
@@ -170,9 +170,9 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
         if(i == 0 && j == 0){
             break;
         }
-        switch (current.direction)
+        switch (current.cases)
         {
-        case left:
+        case insertion:
             j--;
             *tracebackS1 += '-';
             if (j >= 0){
@@ -183,7 +183,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
             }
             break;
         
-        case diagonal:
+        case substitution:
             i--;
             j--;
             if (i >= 0){
@@ -200,7 +200,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
             }
             break;
 
-        case up:
+        case deletion:
             i--;
             if (i >= 0){
                 *tracebackS1 += s1[i];
@@ -226,14 +226,14 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
     for (int i = 0; i < m; i++){
         DPTable[i][0].value = 0;
-        DPTable[i][0].direction = up;
+        DPTable[i][0].cases = deletion;
         DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
         DPTable[i][0].iScore = INT_MIN - h - g;
     }
     for (int j = 0; j < n; j++){
         DPTable[0][j].value = 0;
-        DPTable[0][j].direction = left;
+        DPTable[0][j].cases = insertion;
         DPTable[0][j].sScore = INT_MIN - h - g;
         DPTable[0][j].dScore = INT_MIN - h - g;
         DPTable[0][j].iScore = h + j * g;
@@ -247,17 +247,17 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
             DPTable[i][j].dScore = getMaxOrZero(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
             DPTable[i][j].iScore = getMaxOrZero(DPTable[i][j - 1].sScore + g + h, DPTable[i][j - 1].dScore + g + h, DPTable[i][j - 1].iScore + g);
 
-            // find direction to proceed
+            // find cases to proceed
             if(DPTable[i][j].sScore > std::max(DPTable[i][j].dScore, DPTable[i][j].iScore)){
-                DPTable[i][j].direction = diagonal;
+                DPTable[i][j].cases = substitution;
                 DPTable[i][j].value = DPTable[i][j].sScore;
             }
             else if (DPTable[i][j].dScore > DPTable[i][j].iScore){
-                DPTable[i][j].direction = up;
+                DPTable[i][j].cases = deletion;
                 DPTable[i][j].value = DPTable[i][j].dScore;
             }
             else {
-                DPTable[i][j].direction = left;
+                DPTable[i][j].cases = insertion;
                 DPTable[i][j].value = DPTable[i][j].iScore;
             }
         }
@@ -269,68 +269,57 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
 int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* tracebackS1, std::string* tracebackS2)
 {  
     extern std::string s1, s2;
-    int i = 0, j = 0;
+    int maxI, maxJ;
     int score = 0;
-    
-    DP_Cell current = localTable[i][j];
 
     // finding max indexes
-    // for (int maxI = 0; maxI < localTable.size(); maxI++){
-    //     for (int maxJ = 0; maxJ < localTable[0].size(); maxJ++){
-    //         if(localTable[maxI][maxJ].value > score){
-    //             score = localTable[maxI][maxJ].value;
-    //             i = maxI;
-    //             j = maxJ;
-    //         }
-    //     }
-    // }
+    for (int i = 0; i < localTable.size(); i++){
+        for (int j = 0; j < localTable[0].size(); j++){
+            if(localTable[i][j].value > score){
+                score = localTable[i][j].value;
+                maxI = i;
+                maxJ = j;
+            }
+        }
+    }
+
+    DP_Cell current = localTable[maxI][maxJ];
+
     while(current.value > 0){
-        if (j < 0) {
-            current = localTable[i][0];
-        }
-        else if (i < 0) {
-            current = localTable[0][j];
-        }
-        else {
-            current = localTable[i][j];
-        }
-        if(i == 0 && j == 0){
-            break;
-        }
-        switch (current.direction)
+        switch (current.cases)
         {
-        case left:
-            j--;
+        case insertion:
+            maxJ--;
             *tracebackS1 += '-';
-            if (j >= 0){
-                *tracebackS2 += s2[j];
+            if (maxJ >= 0){
+                *tracebackS2 += s2[maxJ];
             }
             else {
                 *tracebackS2 += '-';
             }
             break;
         
-        case diagonal:
-            i--;
-            j--;
-            if (i >= 0){
-                *tracebackS1 += s1[i];
+        case substitution:
+            maxI--;
+            maxJ--;
+            if (maxI >= 0){
+                *tracebackS1 += s1[maxI];
             }
             else {
                 *tracebackS1 += '-';
             }
-            if (j >= 0){
-                *tracebackS2 += s2[j];
+            if (maxJ >= 0){
+                *tracebackS2 += s2[maxJ];
             }
             else {
                 *tracebackS2 += '-';
             }
             break;
 
-        case up:
-            i--;
-            if (i >= 0){
-                *tracebackS1 += s1[i];
+        case deletion:
+            maxI--;
+            if (maxI >= 0){
+                *tracebackS1 += s1[maxI];
             }
             else {
                 *tracebackS1 += '-';
@@ -339,7 +328,7 @@ int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* 
             break;
         }
 
-        current = localTable[i][j];
+        current = localTable[maxI][maxJ];
     }
     return score;
 }

@@ -10,22 +10,22 @@
 
 struct DP_Cell {
     int value;
-    int direction;
+    int cases;
     int sScore;
     int dScore;
     int iScore;
 };
 
-enum Direction {
-    left = 0,
-    diagonal = 1,
-    up = 2
+enum Case {
+    insertion = 0,
+    substitution = 1,
+    deletion = 2
 };
 
 void readInputFile(std::string);
 void readConfigFile(std::string);
 int getMaxOf3Int(int, int, int);
-int checkMatch(char a, char b);
+int checkMatch(char, char);
 int getMaxOrZero(int, int, int);
 std::vector<std::vector<DP_Cell> > globalAlignment(std::string, std::string);
 int tracebackGlobal (std::vector<std::vector<DP_Cell> >, std::string *, std::string *);
