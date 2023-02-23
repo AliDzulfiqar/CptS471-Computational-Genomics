@@ -98,21 +98,21 @@ int checkMatch(char a, char b){
 
 std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s2)
 {
-    int m = s1.length();
-    int n = s2.length();
+    int m = s1.length() + 1;
+    int n = s2.length() + 1;
 
     extern int h, g;
 
     // initialize matrix
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
-    for (int i = 0; i <= m; i++){
+    for (int i = 0; i < m; i++){
         DPTable[i][0].value = i * g;
         DPTable[i][0].direction = up;
         DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
         DPTable[i][0].iScore = INT_MIN - h - g;
     }
-    for (int j = 0; j <= n; j++){
+    for (int j = 0; j < n; j++){
         DPTable[0][j].value = j * g;
         DPTable[0][j].direction = left;
         DPTable[0][j].sScore = INT_MIN - h - g;
@@ -121,8 +121,8 @@ std::vector<std::vector<DP_Cell> > globalAlignment(std::string s1, std::string s
     }
 
     // iterate each elements of the matrix
-    for (int i = 1; i <= m; i++){
-        for (int j = 1; j <= n; j++){
+    for (int i = 1; i < m; i++){
+        for (int j = 1; j < n; j++){
             // find max score
             DPTable[i][j].sScore = getMaxOf3Int(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
             DPTable[i][j].dScore = getMaxOf3Int(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
@@ -157,7 +157,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
     
     DP_Cell current = globalTable[i][j];
     
-    while(i >= 0 && j >= 0 && tracebackS1){
+    while(i > 0 && j > 0){
         if (j < 0) {
             current = globalTable[i][0];
         }
@@ -173,7 +173,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
         switch (current.direction)
         {
         case left:
-            --j;
+            j--;
             *tracebackS1 += '-';
             if (j >= 0){
                 *tracebackS2 += s2[j];
@@ -201,7 +201,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
             break;
 
         case up:
-            --i;
+            i--;
             if (i >= 0){
                 *tracebackS1 += s1[i];
             }
@@ -217,21 +217,21 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
 
 std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2)
 {
-    int m = s1.length();
-    int n = s2.length();
+    int m = s1.length() + 1;
+    int n = s2.length() + 1;
 
     extern int h, g;
 
     // initialize matrix
     std::vector<std::vector<DP_Cell> > DPTable(m + 1, std::vector<DP_Cell>(n + 1));
-    for (int i = 0; i <= m; i++){
+    for (int i = 0; i < m; i++){
         DPTable[i][0].value = 0;
         DPTable[i][0].direction = up;
         DPTable[i][0].sScore = INT_MIN - h - g;
         DPTable[i][0].dScore = h + i * g;
         DPTable[i][0].iScore = INT_MIN - h - g;
     }
-    for (int j = 0; j <= n; j++){
+    for (int j = 0; j < n; j++){
         DPTable[0][j].value = 0;
         DPTable[0][j].direction = left;
         DPTable[0][j].sScore = INT_MIN - h - g;
@@ -240,8 +240,8 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     }
 
     // iterate each elements of the matrix
-    for (int i = 1; i <= m; i++){
-        for (int j = 1; j <= n; j++){
+    for (int i = 1; i < m; i++){
+        for (int j = 1; j < n; j++){
             // find max score
             DPTable[i][j].sScore = getMaxOrZero(DPTable[i - 1][j - 1].sScore,DPTable[i - 1][j - 1].dScore,DPTable[i - 1][j - 1].iScore) + checkMatch(s1[i - 1], s2[j - 1]);
             DPTable[i][j].dScore = getMaxOrZero(DPTable[i - 1][j].sScore + g + h, DPTable[i - 1][j].dScore + g, DPTable[i - 1][j].iScore + g + h);
@@ -266,6 +266,83 @@ std::vector<std::vector<DP_Cell> > localAlignment(std::string s1, std::string s2
     return DPTable;
 }
 
+int tracebackLocal (std::vector<std::vector<DP_Cell> > localTable, std::string* tracebackS1, std::string* tracebackS2)
+{  
+    extern std::string s1, s2;
+    int i = 0, j = 0;
+    int score = 0;
+    
+    DP_Cell current = localTable[i][j];
+
+    // finding max indexes
+    // for (int maxI = 0; maxI < localTable.size(); maxI++){
+    //     for (int maxJ = 0; maxJ < localTable[0].size(); maxJ++){
+    //         if(localTable[maxI][maxJ].value > score){
+    //             score = localTable[maxI][maxJ].value;
+    //             i = maxI;
+    //             j = maxJ;
+    //         }
+    //     }
+    // }
+    while(current.value > 0){
+        if (j < 0) {
+            current = localTable[i][0];
+        }
+        else if (i < 0) {
+            current = localTable[0][j];
+        }
+        else {
+            current = localTable[i][j];
+        }
+        if(i == 0 && j == 0){
+            break;
+        }
+        switch (current.direction)
+        {
+        case left:
+            j--;
+            *tracebackS1 += '-';
+            if (j >= 0){
+                *tracebackS2 += s2[j];
+            }
+            else {
+                *tracebackS2 += '-';
+            }
+            break;
+        
+        case diagonal:
+            i--;
+            j--;
+            if (i >= 0){
+                *tracebackS1 += s1[i];
+            }
+            else {
+                *tracebackS1 += '-';
+            }
+            if (j >= 0){
+                *tracebackS2 += s2[j];
+            }
+            else {
+                *tracebackS2 += '-';
+            }
+            break;
+
+        case up:
+            i--;
+            if (i >= 0){
+                *tracebackS1 += s1[i];
+            }
+            else {
+                *tracebackS1 += '-';
+            }
+            *tracebackS2 += '-';
+            break;
+        }
+
+        current = localTable[i][j];
+    }
+    return score;
+}
 void printReport(std::string filename, bool alignmentType)
 {
     // declare variables
@@ -293,22 +370,11 @@ void printReport(std::string filename, bool alignmentType)
     outfile << "Sequence 1 = 's1', length = " << s1.length() << std::endl;
     outfile << "Sequence 2 = 's2', length = " << s2.length() << std::endl;
     outfile << std::endl;
-    outfile << "Report:" << std::endl;
+    
 
     if(alignmentType){
         std::vector<std::vector <DP_Cell> > localTable = localAlignment(s1, s2);
-        outfile << "Local Substitution Score: " << localTable[s1.length()][s2.length()].sScore << std::endl;
-        outfile << "Local Deletion Score: " << localTable[s1.length()][s2.length()].dScore << std::endl;
-        outfile << "Local Insertion Score: " << localTable[s1.length()][s2.length()].iScore << std::endl;
-        outfile << "Local Value: " << localTable[s1.length()][s2.length()].value << std::endl;
-    }
-    else {
-        std::vector<std::vector <DP_Cell> > globalTable = globalAlignment(s1, s2);
-        // outfile << "Global Substitution Score: " << globalTable[s1.length()][s2.length()].sScore << std::endl;
-        // outfile << "Global Deletion Score: " << globalTable[s1.length()][s2.length()].dScore << std::endl;
-        // outfile << "Global Insertion Score: " << globalTable[s1.length()][s2.length()].iScore << std::endl;
-        // outfile << "Global Value: " << globalTable[s1.length()][s2.length()].value << std::endl;
-        tracebackGlobal(globalTable, &tracebackS1, &tracebackS2);
+        optimalScore = tracebackLocal(localTable, &tracebackS1, &tracebackS2);
         std::reverse(tracebackS1.begin(), tracebackS1.end());
         std::reverse(tracebackS2.begin(), tracebackS2.end());
         for (int i = 0; i < tracebackS1.length(); i++){
@@ -355,7 +421,70 @@ void printReport(std::string filename, bool alignmentType)
         for (int i = 0; i < tracebackS2.length(); i++){
             outfile << tracebackS2[i];
         }
+        outfile << std::endl;
+        outfile << std::endl;
+        outfile << "Report:" << std::endl;
+        outfile << std::endl;
+        outfile << "Local Optimal Score: " << optimalScore << std::endl;
+        outfile << std::endl;
+        outfile << "Number of:  matches = " << totalMatches << ", mismatches = " << totalMismatches << ", opening gaps = " << openingGaps << ", gap extensions = " << gapExtensions<< std::endl;
+        outfile << "Identities = " << totalMatches << "/" << tracebackS1.length() << " (" << ((floor)((double)totalMatches/(double)tracebackS1.length()*100)) << "%), " << "Gaps = " << gapExtensions << "/" << tracebackS1.length() << " (" << ((floor)((double)gapExtensions/(double)tracebackS1.length()*100)) << "%)";
 
+    }
+    else {
+        std::vector<std::vector <DP_Cell> > globalTable = globalAlignment(s1, s2);
+        optimalScore = tracebackGlobal(globalTable, &tracebackS1, &tracebackS2);
+        std::reverse(tracebackS1.begin(), tracebackS1.end());
+        std::reverse(tracebackS2.begin(), tracebackS2.end());
+        for (int i = 0; i < tracebackS1.length(); i++){
+            outfile << tracebackS1[i];
+        }
+        outfile << std::endl;
+        
+        for (int i = 0; i < tracebackS1.length(); i++){
+            
+            if (tracebackS1[i] == tracebackS2[i]){
+                outfile << "|";
+                totalMatches++;
+            }
+            else if(tracebackS1[i] == '-'){
+                outfile << " ";
+                s1GapCount++;
+                if (tracebackS1[i - 1] != '-')
+                {
+                    openingGaps++;
+                    gapExtensions++;
+                }
+                else {
+                    gapExtensions++;
+                }
+            }
+            else if(tracebackS2[i] == '-'){
+                outfile << " ";
+                s2GapCount++;
+                if (tracebackS2[i - 1] != '-')
+                {
+                    openingGaps++;
+                    gapExtensions++;
+                }
+                else {
+                    gapExtensions++;
+                }
+            }
+            else {
+                outfile << " ";
+                totalMismatches++;
+            }
+        }
+        outfile << std::endl;
+        for (int i = 0; i < tracebackS2.length(); i++){
+            outfile << tracebackS2[i];
+        } 
+        outfile << std::endl;
+        outfile << std::endl;
+        outfile << "Report:" << std::endl;
+        outfile << std::endl;
+        outfile << "Global Optimal Score: " << optimalScore << std::endl;
         outfile << std::endl;
         outfile << "Number of:  matches = " << totalMatches << ", mismatches = " << totalMismatches << ", opening gaps = " << openingGaps << ", gap extensions = " << gapExtensions<< std::endl;
         outfile << "Identities = " << totalMatches << "/" << tracebackS1.length() << " (" << ((floor)((double)totalMatches/(double)tracebackS1.length()*100)) << "%), " << "Gaps = " << gapExtensions << "/" << tracebackS1.length() << " (" << ((floor)((double)gapExtensions/(double)tracebackS1.length()*100)) << "%)";
