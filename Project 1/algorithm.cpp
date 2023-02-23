@@ -374,7 +374,7 @@ void printReport(std::string filename, bool alignmentType)
     outfile << "Sequence 2 = 's2', length = " << s2.length() << std::endl;
     outfile << std::endl;
     
-    
+    // determine outfile based on alignment type
     if(alignmentType){
         std::vector<std::vector <DP_Cell> > localTable = localAlignment(s1, s2);
         optimalScore = tracebackLocal(localTable, &tracebackS1, &tracebackS2);
