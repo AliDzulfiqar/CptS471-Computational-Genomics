@@ -165,7 +165,7 @@ int tracebackGlobal (std::vector<std::vector<DP_Cell> > globalTable, std::string
     DP_Cell current = globalTable[i][j];
     
     // Retrace the table based on each cases. Produce 2 aligned string values
-    while(i > 0 && j > 0){
+    while(i >= 0 && j >= 0){
         if (j < 0) {
             current = globalTable[i][0];
         }
