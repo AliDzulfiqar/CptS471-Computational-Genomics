@@ -1,8 +1,15 @@
 #include "header.hpp"
 
-using namespace std;
+// Define globals
+std::string s1, s1Name;
 
-int main() {
-    cout << "Hello";
-    return 0;    
+int main(int argc, char* argv[])
+{   
+    // using command line argument for input $
+    // readInputFile(argv[0]);
+
+    std::cout << s1Name;
+    std::cout << s1;
+    return 0;
+    
 }

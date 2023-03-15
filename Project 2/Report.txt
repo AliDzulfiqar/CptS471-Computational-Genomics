@@ -1,0 +1,27 @@
+INPUT:
+******
+
+
+
+
+
+
+
+OUTPUT:
+********
+
+Scores:	match = 1, mismatch = -2, h = -5, g = -1
+
+Sequence 1 = 's1', length = 0
+Sequence 2 = 's2', length = 0
+
+
+
+
+
+Report:
+
+Global Optimal Score: 0
+
+Number of:  matches = 0, mismatches = 0, opening gaps = 0, gap extensions = 0
+Identities = 0/0 (nan%), Gaps = 0/0 (nan%)

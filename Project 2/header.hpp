@@ -8,5 +8,6 @@
 #include <vector>
 #include <cmath>
 
+void readInputFile(std::string);
 
 #endif
