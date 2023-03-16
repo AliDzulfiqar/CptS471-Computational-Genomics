@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
         readAlphabetFile(argv[2]);
     }
     else {
-        std::cout << "Missing input file. Expected one input file containing sequence and one input containing alphabet file.";
+        std::cout << "Missing input file. Expected one input file containing sequence and one input containing alphabet file." << std::endl;
     }
     
     
