@@ -27,22 +27,19 @@ void readInputFile(std::string filename) {
 }
 
 void readAlphabetFile(std::string filename) {
-    // extern std::unordered_map<char, int> alphabetValues;
+    extern std::unordered_map<char, int> alphabetValues;
     std::ifstream infile;
     std::string line;
     
     infile.open(filename);
     if(infile.is_open()) {
-        // alphabetValues.insert(std::pair<char, int>("$", 0));
+        alphabetValues['$'] = 0;
         getline(infile, line);
 
-        // for (char c : line) {
-        //     if (c != ' '){
-        //         // alphabetValues.insert(std::pair<char, int>(c, alphabetValues.size()));
-        //         std::cout << c;
-        //     }
-        // }
-        // std::cout << line;
+        for (int i = 0; i < line.length(); i++) {
+            char c = line[i];
+            alphabetValues[c] = alphabetValues.size();
+        }
     }
     else {
         std::cout << "Cannot open file" << std::endl;
