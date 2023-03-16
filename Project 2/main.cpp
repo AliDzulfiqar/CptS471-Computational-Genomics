@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 {   
     /* $ 
     Using command line to input string. 
-    run $ <test executable> <input file containing sequence s> <input alphabet file> on terminal
+    Run $ <test executable> <input file containing sequence s> <input alphabet file> on terminal
     */
 
     if(argc > 2){
@@ -24,8 +24,6 @@ int main(int argc, char* argv[])
     for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
         std::cout << it->first << ": " << it->second << std::endl;
     }
-
-
 
     return 0;
     
