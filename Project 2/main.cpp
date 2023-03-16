@@ -3,13 +3,26 @@
 // Define globals
 std::string s1, s1Name;
 
+
 int main(int argc, char* argv[])
 {   
-    // using command line argument for input $
-    // readInputFile(argv[0]);
+    /* $ 
+    Using command line to input string. 
+    run $ <test executable> <input file containing sequence s> <input alphabet file> on terminal
+    */
 
-    std::cout << s1Name;
-    std::cout << s1;
+    if(argc > 2){
+        readInputFile(argv[1]);
+        readAlphabetFile(argv[2]);
+    }
+    else {
+        std::cout << "Missing input file. Expected one input file containing sequence and one input containing alphabet file.";
+    }
+    
+    
+
+
+
     return 0;
     
 }

@@ -5,9 +5,10 @@
 #include <algorithm>
 #include <string>
 #include <fstream>
-#include <vector>
 #include <cmath>
+#include <unordered_map>
 
 void readInputFile(std::string);
+void readAlphabetFile(std::string);
 
 #endif
