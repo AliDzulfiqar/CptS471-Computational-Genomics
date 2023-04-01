@@ -26,6 +26,8 @@ class STNode {
     STNode* children;
     STNode* parent;
 
+    STNode () {}
+
     STNode(int id, STNode* parent, int start, int end) {
         id = id;
         start = start;

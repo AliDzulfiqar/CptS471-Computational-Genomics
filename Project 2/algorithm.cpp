@@ -75,18 +75,12 @@ STNode* SuffixTree::findPath(STNode *u, std::string s, int i){
     STNode *v = u;
     std::string x = s;
     while(true) {
+        // case of no existing branch
         if (u->children == nullptr) {
-            u->children[alphabetValues[x[0]]] = new STNode();
+            u->children[alphabetValues[x[0]]] = new STNode(i, u, u->children->start, u->children->end);
             return u->children[alphabetValues[x[0]]];
         }
     }
-
-    // case of no existing branch
-    else {
-        u->children[alphabetValues[x[0]]] = new STNode();
-        return u->children[alphabetValues[x[0]]];
-    }
-
 }
 
 
