@@ -40,7 +40,7 @@ class STNode {
 class SuffixTree {
     public:
     STNode* root;
-    STNode* buildNaiveTree();
+    STNode* buildNaiveTree(std::string);
     STNode* findPath(STNode*, std::string, int);
 };
 

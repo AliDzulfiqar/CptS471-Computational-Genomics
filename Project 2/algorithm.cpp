@@ -84,3 +84,12 @@ STNode* SuffixTree::findPath(STNode *u, std::string s, int i){
 }
 
 
+STNode* SuffixTree::buildNaiveTree(std::string str) {
+    root = nullptr;
+    STNode *t = root;
+    for (int i = 1; i < str.length(); i++){
+        findPath(t, str, i);
+    }
+    return t;
+}
+
