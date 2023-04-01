@@ -48,11 +48,45 @@ void readAlphabetFile(std::string filename) {
 
 // Finds the path starting at the specified node argument that spells out the longest possible prefix of the specified string argument, then insert the next suffix
 STNode* SuffixTree::findPath(STNode *u, std::string s, int i){
+
+    // Initialize
+    // v-> u, x -> s
+    // Repeat:
+    // IF no existing branch{
+    //     insert new leaf for s under u
+    //     return
+    // }
+
+    // Compare characters of the edge label against x until first mismatch or edgelable exhausted
+
+    // if mismatch {
+    //     break edge 
+    //     create new internal node 
+    //     create new leaf for s under that node 
+    //     return 
+    // }
+    // else {
+    //     v-> next internal node 
+    //     x-> x 
+    // }
+
+    // until (leaf inserted)
     extern std::unordered_map<char, int> alphabetValues;
-    STNode v = u;
+    STNode *v = u;
     std::string x = s;
-    if(u->children[alphabetValues[x[0]]]){
-        
+    while(true) {
+        if (u->children == nullptr) {
+            u->children[alphabetValues[x[0]]] = new STNode();
+            return u->children[alphabetValues[x[0]]];
+        }
     }
+
+    // case of no existing branch
+    else {
+        u->children[alphabetValues[x[0]]] = new STNode();
+        return u->children[alphabetValues[x[0]]];
+    }
+
 }
+
 

@@ -20,21 +20,26 @@ node v': SL(u') - may or may not be the parent of v
 
 class STNode {
     public:
-    STNode() {
-        int id;
-        STNode* children[alphabetValues + 1];
-        STNode* parent;
-    }
+    int id;
+    int start;       
+    int end;
+    STNode* children;
+    STNode* parent;
 
+    STNode(int id, STNode* parent, int start, int end) {
+        id = id;
+        start = start;
+        end = end
+        children = nullptr;
+        parent = nullptr;
+    }
 };
 
 class SuffixTree {
     public:
+    STNode* root;
     STNode* buildNaiveTree();
     STNode* findPath(STNode*, std::string, int);
-    
-    private:
-    STNode* root;
 };
 
 void readInputFile(std::string);
