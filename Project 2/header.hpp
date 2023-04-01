@@ -8,20 +8,37 @@
 #include <cmath>
 #include <unordered_map>
 
+/*
+node u : suffix leaf i-1's parent
+
+node v : suffix link SL(u)
+
+node u': parent of u (if exists)
+
+node v': SL(u') - may or may not be the parent of v
+*/
+
 class STNode {
     public:
-    STNode() {}
+    STNode() {
+        int id;
+        STNode* children[alphabetValues + 1];
+        STNode* parent;
+    }
+
 };
 
 class SuffixTree {
     public:
-    SuffixTree() {}
-
+    STNode* buildNaiveTree();
+    STNode* findPath(STNode*, std::string, int);
+    
     private:
     STNode* root;
 };
 
 void readInputFile(std::string);
 void readAlphabetFile(std::string);
+
 
 #endif

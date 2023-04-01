@@ -45,3 +45,14 @@ void readAlphabetFile(std::string filename) {
         std::cout << "Cannot open file" << std::endl;
     }
 }
+
+// Finds the path starting at the specified node argument that spells out the longest possible prefix of the specified string argument, then insert the next suffix
+STNode* SuffixTree::findPath(STNode *u, std::string s, int i){
+    extern std::unordered_map<char, int> alphabetValues;
+    STNode v = u;
+    std::string x = s;
+    if(u->children[alphabetValues[x[0]]]){
+        
+    }
+}
+

@@ -20,10 +20,10 @@ int main(int argc, char* argv[])
         std::cout << "Missing input file. Expected one input file containing sequence and one input containing alphabet file." << std::endl;
     }
 
-    // Use C++11
-    for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
-        std::cout << it->first << ": " << it->second << std::endl;
-    }
+    // // Use C++11
+    // for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
+    //     std::cout << it->first << ": " << it->second << std::endl;
+    // }
 
     return 0;
     
