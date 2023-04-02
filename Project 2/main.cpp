@@ -21,9 +21,9 @@ int main(int argc, char* argv[])
     }
 
     // // Use C++11
-    // for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
-    //     std::cout << it->first << ": " << it->second << std::endl;
-    // }
+    for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
+        std::cout << it->first << ": " << it->second << std::endl;
+    }
 
     return 0;
     
