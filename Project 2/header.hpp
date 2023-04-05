@@ -33,7 +33,7 @@ class STNode {
         start = start;
         end = end
         children = nullptr;
-        parent = nullptr;
+        parent = parent;
     }
 };
 
