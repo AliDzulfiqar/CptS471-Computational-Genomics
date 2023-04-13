@@ -8,6 +8,7 @@
 #include <cmath>
 #include <unordered_map>
 #include <sys/sysctl.h>
+#include <chrono>
 
 #define ALPHABET_LENGTH 4
 

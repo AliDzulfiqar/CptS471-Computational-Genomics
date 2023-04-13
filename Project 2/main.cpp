@@ -21,6 +21,9 @@ int main(int argc, char* argv[])
     }
 
     // Report
+    auto start = std::chrono::high_resolution_clock::now();
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Total runtime: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
     std::cout << "Number of Internal Nodes" << std::endl;
     std::cout << "Leaves" << std::endl;
     std::cout << "Total Number of Nodes" << std::endl;
