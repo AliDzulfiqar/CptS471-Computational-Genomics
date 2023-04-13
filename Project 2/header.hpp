@@ -7,6 +7,7 @@
 #include <fstream>
 #include <cmath>
 #include <unordered_map>
+#include <sys/sysctl.h>
 
 #define ALPHABET_LENGTH 4
 
