@@ -4,32 +4,34 @@
 std::unordered_map<char, int> alphabetValues;
 std::string s1, s1Name;
 
-
-int main(int argc, char* argv[])
-{   
-    /* $ 
-    Using command line to input string. 
+int main(int argc, char *argv[])
+{
+    /* $
+    Using command line to input string.
     Run $ <test executable> <input file containing sequence s> <input alphabet file> on terminal
     */
 
-    if(argc > 2){
-        readInputFile(argv[1]);
+    if (argc > 2)
+    {
+        std::string infile = readInputFile(argv[1]);
         readAlphabetFile(argv[2]);
+        SuffixTree stree;
+
+        // Report
+        auto start = std::chrono::high_resolution_clock::now();
+        stree.buildNaiveTree(infile);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::cout << "Total runtime: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
+        std::cout << "Number of Internal Nodes" << std::endl;
+        std::cout << "Leaves" << std::endl;
+        std::cout << "Total Number of Nodes" << std::endl;
+        std::cout << "Average string depth of the deepest internal node" << std::endl;
+        std::cout << "String depth of the deepest internal Nodes" << std::endl;
     }
-    else {
+    else
+    {
         std::cout << "Missing input file. Expected one input file containing sequence and one input containing alphabet file." << std::endl;
     }
-
-    // Report
-    auto start = std::chrono::high_resolution_clock::now();
-    auto end = std::chrono::high_resolution_clock::now();
-    std::cout << "Total runtime: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-    std::cout << "Number of Internal Nodes" << std::endl;
-    std::cout << "Leaves" << std::endl;
-    std::cout << "Total Number of Nodes" << std::endl;
-    std::cout << "Average string depth of the deepest internal node" << std::endl;
-    std::cout << "String depth of the deepest internal Nodes" << std::endl;
-
 
     // // // Use C++11
     // for (auto it = alphabetValues.begin(); it != alphabetValues.end(); it++) {
@@ -37,5 +39,4 @@ int main(int argc, char* argv[])
     // }
 
     return 0;
-    
 }
