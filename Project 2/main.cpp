@@ -3,6 +3,7 @@
 // Define globals
 std::unordered_map<char, int> alphabetValues;
 std::string s1, s1Name;
+int internalNodes = 0, numLeaves = 0, numNodes = 0, avgDepth = 0, deepestDepth = 0;
 
 int main(int argc, char *argv[])
 {
@@ -13,20 +14,20 @@ int main(int argc, char *argv[])
 
     if (argc > 2)
     {
-        std::string infile = readInputFile(argv[1]);
+        std::string input = readInputFile(argv[1]);
         readAlphabetFile(argv[2]);
         SuffixTree stree;
 
         // Report
         auto start = std::chrono::high_resolution_clock::now();
-        stree.buildNaiveTree(infile);
+        stree.buildNaiveTree(input);
         auto end = std::chrono::high_resolution_clock::now();
         std::cout << "Total runtime: " << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << "ms" << std::endl;
-        std::cout << "Number of Internal Nodes" << std::endl;
-        std::cout << "Leaves" << std::endl;
-        std::cout << "Total Number of Nodes" << std::endl;
-        std::cout << "Average string depth of the deepest internal node" << std::endl;
-        std::cout << "String depth of the deepest internal Nodes" << std::endl;
+        std::cout << "Number of Internal Nodes" << internalNodes << std::endl;
+        std::cout << "Leaves" << numLeaves << std::endl;
+        std::cout << "Total Number of Nodes" << numNodes << std::endl;
+        std::cout << "Average string depth of the deepest internal node" << avgDepth << std::endl;
+        std::cout << "String depth of the deepest internal Nodes" << deepestDepth << std::endl;
     }
     else
     {

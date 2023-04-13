@@ -10,6 +10,7 @@
 #include <sys/sysctl.h>
 #include <chrono>
 
+// Alphabet length for indexing alphabets
 #define ALPHABET_LENGTH 4
 
 /*
@@ -60,15 +61,15 @@ class SuffixTree {
     }
     STNode* getRootNode() {
         return root;
-    };
+    }
 
-    STNode* buildNaiveTree(std::string);
+    SuffixTree buildNaiveTree(std::string);
     STNode* findPath(STNode*, std::string, int);
     std::string getPathLabel(std::string);
     STNode* nodeHops(std::string, std::string, int);
 };
 
-void readInputFile(std::string);
+std::string readInputFile(std::string);
 void readAlphabetFile(std::string);
 
 

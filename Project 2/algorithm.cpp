@@ -1,7 +1,7 @@
 #include "header.hpp"
 
 // Read input file (.fasta)
-void readInputFile(std::string filename) {
+std::string readInputFile(std::string filename) {
     extern std::string s1, s1Name;
     std::ifstream infile;
     std::string line;
@@ -23,7 +23,8 @@ void readInputFile(std::string filename) {
     else
     {
         std::cout << "Cannot open file" << std::endl;
-    } 
+    }
+    return s1;
 }
 
 void readAlphabetFile(std::string filename) {
@@ -81,21 +82,22 @@ STNode* SuffixTree::findPath(STNode* u, std::string s, int i){
             return u->children[alphabetValues[x[0]]];
         }
     }
+    return u->children[alphabetValues[x[0]]];
 }
 
 
 // // Build naive tree
-STNode* SuffixTree::buildNaiveTree(std::string str) {
+SuffixTree SuffixTree::buildNaiveTree(std::string str) {
     // T = null
     // for i to n{
     // Ti insert. Find path(root, s..i)
     // }
     // return tree
 
-    root = nullptr;
-    STNode *t = root;
+    SuffixTree t;
+    t.setRootNode(nullptr);
     for (int i = 0; i < str.length(); i++){
-        findPath(root, str, i);
+        findPath(t.getRootNode(), str, i);
     }
     return t;
 }
