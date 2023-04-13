@@ -50,10 +50,20 @@ class STNode {
 };
 
 class SuffixTree {
+    private:
+        STNode* root;
     public:
-    STNode* root;
+    void setRootNode(STNode* newRoot) {
+        root = newRoot;
+    }
+    STNode* getRootNode() {
+        return root;
+    };
+
     STNode* buildNaiveTree(std::string);
-    STNode* findPath(STNode*, std::string, int);
+    STNode* findPath(std::string, int);
+    std::string getPathLabel(std::string);
+    STNode* nodeHops(std::string, std::string, int);
 };
 
 void readInputFile(std::string);
