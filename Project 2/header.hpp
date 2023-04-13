@@ -8,6 +8,8 @@
 #include <cmath>
 #include <unordered_map>
 
+#define ALPHABET_LENGTH 4
+
 /*
 node u : suffix leaf i-1's parent
 
@@ -23,17 +25,27 @@ class STNode {
     int id;
     int start;       
     int end;
-    STNode* children;
+    STNode* children[ALPHABET_LENGTH + 1];
     STNode* parent;
 
-    STNode () {}
+    STNode () {
+        id = 0;
+        start = 0;
+        end = 0;
+        for (int i = 0; i < ALPHABET_LENGTH + 1; i++){
+            children[i] = nullptr;
+        }
+        parent = nullptr;
+    }
 
-    STNode(int id, STNode* parent, int start, int end) {
-        id = id;
-        start = start;
-        end = end
-        children = nullptr;
-        parent = parent;
+    STNode(int newID, STNode* newParent, int newStart, int newEnd) {
+        id = newID;
+        start = newStart;
+        end = newEnd;
+        for (int i = 0; i < ALPHABET_LENGTH + 1; i++){
+            children[i] = nullptr;
+        }
+        parent = newParent;
     }
 };
 
