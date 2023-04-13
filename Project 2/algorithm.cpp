@@ -47,56 +47,56 @@ void readAlphabetFile(std::string filename) {
 }
 
 // // Finds the path starting at the specified node argument that spells out the longest possible prefix of the specified string argument, then insert the next suffix
-// STNode* SuffixTree::findPath(STNode *u, std::string s, int i){
+STNode* SuffixTree::findPath(STNode* u, std::string s, int i){
 
-//     // Initialize
-//     // v-> u, x -> s
-//     // Repeat:
-//     // IF no existing branch{
-//     //     insert new leaf for s under u
-//     //     return
-//     // }
+    // Initialize
+    // v-> u, x -> s
+    // Repeat:
+    // IF no existing branch{
+    //     insert new leaf for s under u
+    //     return
+    // }
 
-//     // Compare characters of the edge label against x until first mismatch or edgelable exhausted
+    // Compare characters of the edge label against x until first mismatch or edgelable exhausted
 
-//     // if mismatch {
-//     //     break edge 
-//     //     create new internal node 
-//     //     create new leaf for s under that node 
-//     //     return 
-//     // }
-//     // else {
-//     //     v-> next internal node 
-//     //     x-> x 
-//     // }
+    // if mismatch {
+    //     break edge 
+    //     create new internal node 
+    //     create new leaf for s under that node 
+    //     return 
+    // }
+    // else {
+    //     v-> next internal node 
+    //     x-> x 
+    // }
 
-//     // until (leaf inserted)
-//     extern std::unordered_map<char, int> alphabetValues;
-//     STNode *v = u;
-//     std::string x = s;
-//     while(true) {
-//         // case of no existing branch
-//         if (u->children == nullptr) {
-//             u->children[alphabetValues[x[0]]] = new STNode(i, u, u->children->start, u->children->end);
-//             return u->children[alphabetValues[x[0]]];
-//         }
-//     }
-// }
+    // until (leaf inserted)
+    extern std::unordered_map<char, int> alphabetValues;
+    STNode *v = u;
+    std::string x = s;
+    while(true) {
+        // case of no existing branch
+        if (u->children == nullptr) {
+            u->children[alphabetValues[x[0]]] = new STNode(i, u, u->children->start, u->children->end);
+            return u->children[alphabetValues[x[0]]];
+        }
+    }
+}
 
 
 // // Build naive tree
-// STNode* SuffixTree::buildNaiveTree(std::string str) {
-//     // T = null
-//     // for i to n{
-//     // Ti insert. Find path(root, s..i)
-//     // }
-//     // return tree
+STNode* SuffixTree::buildNaiveTree(std::string str) {
+    // T = null
+    // for i to n{
+    // Ti insert. Find path(root, s..i)
+    // }
+    // return tree
 
-//     root = nullptr;
-//     STNode *t = root;
-//     for (int i = 0; i < str.length(); i++){
-//         findPath(root, str, i);
-//     }
-//     return t;
-// }
+    root = nullptr;
+    STNode *t = root;
+    for (int i = 0; i < str.length(); i++){
+        findPath(root, str, i);
+    }
+    return t;
+}
 

@@ -63,7 +63,7 @@ class SuffixTree {
     };
 
     STNode* buildNaiveTree(std::string);
-    STNode* findPath(std::string, int);
+    STNode* findPath(STNode*, std::string, int);
     std::string getPathLabel(std::string);
     STNode* nodeHops(std::string, std::string, int);
 };
